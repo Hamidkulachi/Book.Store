@@ -29,6 +29,7 @@ namespace Book.Store.Controllers
             {
                 _db.Categories.Add(category);
                 _db.SaveChanges();
+                TempData["success"] = "Category is created successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -50,6 +51,7 @@ namespace Book.Store.Controllers
             {
                 _db.Categories.Update(category);
                 _db.SaveChanges();
+                TempData["success"] = "Category is updated successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -75,6 +77,7 @@ namespace Book.Store.Controllers
             Category category = _db.Categories.FirstOrDefault(u => u.Id == id);
             _db.Categories.Remove(category);
             _db.SaveChanges();
+            TempData["success"] = "Category is deleted successfully";
             return RedirectToAction("Index");
         }
     }
