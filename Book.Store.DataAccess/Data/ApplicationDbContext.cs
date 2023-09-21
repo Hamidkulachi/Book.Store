@@ -1,5 +1,4 @@
 ﻿using Book.Store.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace Book.Store.Data
