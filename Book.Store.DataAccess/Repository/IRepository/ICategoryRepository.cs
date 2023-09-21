@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Book.Store.Models;
+using Book.Store.Repository.IRepository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace Book.Store.DataAccess.Repository.IRepository
 {
-    internal class ICategoryRepository
+    public interface ICategoryRepository:IRepository<Category>
     {
+        void Update(Category obj);
+        void Save();
     }
 }
