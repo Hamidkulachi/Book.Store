@@ -4,83 +4,87 @@ using Book.Store.DataAccess.Repository.IRepository;
 using Book.Store.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Book.Store.Controllers
+namespace Book.Store.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    [Area("Admin")]
+    public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
-            return View(categories);
+            List<Product> products = _unitOfWork.Product.GetAll().ToList();
+            return View(products);
         }
-        
+
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Category category)
+        public IActionResult Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Add(category);
+                _unitOfWork.Product.Add(product);
                 _unitOfWork.Save();
-                TempData["success"] = "Category is created successfully";
+                TempData["success"] = "Product is created successfully";
                 return RedirectToAction("Index");
             }
             return View();
         }
         public IActionResult Edit(int? id)
         {
-            if (id==0||id==null)
+            if (id == 0 || id == null)
             {
                 return NotFound();
             }
-            Category category = _unitOfWork.Category.Get(u => u.Id == id);
-            return View(category);
+            Product product = _unitOfWork.Product.Get(u => u.Id == id);
+            return View(product);
         }
 
         [HttpPost]
-        public IActionResult Edit(Category category)
+        public IActionResult Edit(Product product)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Update(category);
+                _unitOfWork.Product.Update(product);
                 _unitOfWork.Save();
-                TempData["success"] = "Category is updated successfully";
+                TempData["success"] = "Product is updated successfully";
                 return RedirectToAction("Index");
             }
             return View();
         }
         public IActionResult Delete(int? id)
         {
-            if (id == 0||id==null)
+            if (id == 0 || id == null)
             {
                 return NotFound();
             }
-            Category category = _unitOfWork.Category.Get(u => u.Id == id);
-            return View(category);
+            Product product = _unitOfWork.Product.Get(u => u.Id == id);
+            return View(product);
         }
 
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            if (id==null||id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category category = _unitOfWork.Category.Get(u => u.Id == id);
-            _unitOfWork.Category.Remove(category);
+            Product product = _unitOfWork.Product.Get(u => u.Id == id);
+            _unitOfWork.Product.Remove(product);
             _unitOfWork.Save();
-            TempData["success"] = "Category is deleted successfully";
+            TempData["success"] = "Product is deleted successfully";
             return RedirectToAction("Index");
         }
     }
 }
+
+
+
