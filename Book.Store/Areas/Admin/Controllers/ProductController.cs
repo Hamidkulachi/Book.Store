@@ -21,7 +21,7 @@ namespace Book.Store.Areas.Admin.Controllers
             return View(products);
         }
 
-        public IActionResult Create()
+        public IActionResult UpSert(int? id)
         {
             ProductVM productVM = new()
             {
@@ -32,50 +32,52 @@ namespace Book.Store.Areas.Admin.Controllers
                 }),
                 Product = new Product()
             };
-            return View(productVM);
-        }
-        [HttpPost]
-        public IActionResult Create(ProductVM productVM)
-        {
-            if (ModelState.IsValid)
+            if (id==0||id==null)
             {
-                _unitOfWork.Product.Add(productVM.Product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
-                return RedirectToAction("Index");
+                return View(productVM);
             }
             else
             {
-                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                });
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
                 return View(productVM);
             }
+            
         }
-        public IActionResult Edit(int? id)
-        {
-            if (id == 0 || id == null)
-            {
-                return NotFound();
-            }
-            Product product = _unitOfWork.Product.Get(u => u.Id == id);
-            return View(product);
-        }
-
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult UpSert(ProductVM productVM)
         {
-            if (ModelState.IsValid)
+            if (productVM.Product.Id==0|| productVM.Product.Id ==null)
             {
-                _unitOfWork.Product.Update(product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product is updated successfully";
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    _unitOfWork.Product.Add(productVM.Product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product created successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(productVM);
+                }
             }
-            return View();
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    _unitOfWork.Product.Update(productVM.Product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product is updated successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(productVM);
+                }
+            }
+            
         }
+       
+       
         public IActionResult Delete(int? id)
         {
             if (id == 0 || id == null)
