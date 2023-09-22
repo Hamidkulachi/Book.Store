@@ -11,9 +11,11 @@ namespace Book.Store.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork,IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -44,40 +46,39 @@ namespace Book.Store.Areas.Admin.Controllers
             
         }
         [HttpPost]
-        public IActionResult UpSert(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
-            if (productVM.Product.Id==0|| productVM.Product.Id ==null)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
                 {
-                    _unitOfWork.Product.Add(productVM.Product);
-                    _unitOfWork.Save();
-                    TempData["success"] = "Product created successfully";
-                    return RedirectToAction("Index");
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
                 }
-                else
-                {
-                    return View(productVM);
-                }
+
+                _unitOfWork.Product.Add(productVM.Product);
+                _unitOfWork.Save();
+                TempData["success"] = "Product created successfully";
+                return RedirectToAction("Index");
             }
             else
             {
-                if (ModelState.IsValid)
+                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
                 {
-                    _unitOfWork.Product.Update(productVM.Product);
-                    _unitOfWork.Save();
-                    TempData["success"] = "Product is updated successfully";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(productVM);
-                }
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                return View(productVM);
             }
-            
         }
-       
-       
         public IActionResult Delete(int? id)
         {
             if (id == 0 || id == null)
