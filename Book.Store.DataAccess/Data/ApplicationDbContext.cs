@@ -1,4 +1,5 @@
-﻿using Book.Store.Models;
+﻿
+using Book.Store.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Book.Store.Data
