@@ -10,6 +10,7 @@ namespace Book.Store.DataAccess.Repository.IRepository
     {
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
+        ICompanyRepository Company { get; }
         void Save();
     }
 }
