@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Book.Store.DataAccess.Repository
 {
-    public class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class ShopingCartRepository : Repository<ShopingCart>, IShopingCartRepository
     {
         private ApplicationDbContext _db;
-        public CategoryRepository(ApplicationDbContext db) : base(db)
+        public ShopingCartRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
        
-        public void Update(Category obj)
+        public void Update(ShopingCart obj)
         {
-            _db.Categories.Update(obj);
+            _db.ShopingCarts.Update(obj);
         }
     }
 }

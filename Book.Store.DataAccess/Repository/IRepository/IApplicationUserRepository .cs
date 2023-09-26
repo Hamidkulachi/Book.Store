@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Book.Store.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository:IRepository<Category>
+    public interface IApplicationUserRepository : IRepository<ApplicationUser>
     {
-        void Update(Category obj);
     }
 }
