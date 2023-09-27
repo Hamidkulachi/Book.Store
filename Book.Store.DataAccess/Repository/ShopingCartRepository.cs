@@ -11,18 +11,19 @@ using System.Threading.Tasks;
 
 namespace Book.Store.DataAccess.Repository
 {
-    public class ShopingCartRepository : Repository<ShopingCart>, IShopingCartRepository
+    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
     {
         private ApplicationDbContext _db;
-        public ShopingCartRepository(ApplicationDbContext db) : base(db)
+        public ShoppingCartRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-       
-        public void Update(ShopingCart obj)
+
+
+        public void Update(ShoppingCart obj)
         {
-            _db.ShopingCarts.Update(obj);
+            _db.ShoppingCarts.Update(obj);
         }
     }
 }

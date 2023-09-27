@@ -18,7 +18,5 @@ namespace Book.Store.DataAccess.Repository
         {
             _db = db;
         }
-
-       
     }
 }
